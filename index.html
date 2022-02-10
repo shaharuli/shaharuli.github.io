@@ -136,6 +136,7 @@
                 ele.style['background-color']  = '#6aaa64';
                 ele.style['border-color']  = '#6aaa64';
                 charCount[char] = charCount[char] - 1
+                document.getElementById(char).style['background-color']  = '#6aaa64'
             }
             ele.style['color']  = 'white';
         }
@@ -150,12 +151,16 @@
                 ele.style['background-color'] = '#c9b458';
                 ele.style['border-color'] = '#c9b458';
                 charCount[char] = charCount[char] - 1
+                const key = document.getElementById(char);
+                if (key.style['background-color'] !== '#6aaa64') {
+                    key.style['background-color'] = '#c9b458';
+                }
             }
             else {
                 // grey
                 ele.style['background-color']  = '#787c7e';
                 ele.style['border-color']  = '#787c7e';
-                document.getElementById(char).style['background-color']  = 'grey';
+                document.getElementById(char).style['background-color']  = '#787c7e';
             }
         }
         guessIndex += 1;
