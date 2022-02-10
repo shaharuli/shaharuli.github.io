@@ -262,7 +262,7 @@
         }
         else if (guessIndex > 5) {
             $("#loseModal").modal();
-            document.getElementById("loseText").innerText = 'The word was ' + target + '. You were THIS close!';
+            document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
         }
     }
 
