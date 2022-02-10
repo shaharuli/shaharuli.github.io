@@ -6,25 +6,22 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
-<body>
+<body style="position:relative;">
     <div id="header">
-        <h1>Shaharle</h1>
-        <button type="button"  data-toggle="modal" id="help" data-target="#myModal"><i class="fa fa-question-circle fa-lg"></i></button>
+        <button type="button"  data-toggle="modal" id="help" class="headerBtn" data-target="#helpModal"><i class="fa fa-question-circle fa-lg"></i></button>
+        <h1>SHAHARLE</h1>
+        <button type="button"  data-toggle="modal" id="settings" class="headerBtn" data-target="#settingsModal"><i class="fa fa-cog fa-lg"></i></button>
     </div>
     <hr/>
-    <div id="error">
-        <input id="badword" class="btn btn-warning btn-lg" value="No such word">
-    </div>
+    <input id="badword" class="btn btn-warning btn-lg" value="No such word">
     <div id="guesses"></div>
     <div id="virtualKey"></div>
     <div id="end">
         <label id="wordwas"></label>
         <br/>
-        <input id="newword" type="button" class="btn btn-success btn-lg" onclick="init();" value="NEW WORD"/>
-        <input id="language" type="button" onclick="changeLanguage();" class="btn btn-info btn-lg" value="HEBREW"/>
     </div>
     <!-- Help modal -->
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="helpModal" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -39,13 +36,67 @@
                 </div>
                 <div class="modal-body">
                     <p><b>Examples</b><br/></p>
-                    <img src="examples.png">
+                    <img src="examples.png" alt="examples">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
+        </div>
+    </div>
+    <!-- Settings modal -->
+    <div class="modal fade" id="settingsModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <b>settings</b>
+                </div>
+                <div class="modal-body">
+                    <label>Language:</label>
+                    <select id="langSelect">
+                        <option value="eng">English</option>
+                        <option value="heb">Hebrew</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Win modal-->
+    <div class="modal fade" id="winModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <b>You win!</b>
+                </div>
+                <div class="modal-body">
+                    <p id="winText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="init()">Play again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Lose modal-->
+    <div class="modal fade" id="loseModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <b>You lose :(</b>
+                </div>
+                <div class="modal-body">
+                    <p id="loseText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="init()">Play again</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -85,6 +136,9 @@
                 key.style['background-color']  = '';
             }
         } else {
+            document.getElementById('langSelect').addEventListener('change', function() {
+                changeLanguage(this.value);
+            });
             const keyEle = document.getElementById('virtualKey');
             for (const row of keyboard) {
                 for (const key of row) {
@@ -203,23 +257,17 @@
         guessIndex += 1;
         charIndex = 0;
         if (input === target) {
-            document.getElementById('wordwas').innerText = 'You win!';
-            win = true;
+            $("#winModal").modal();
+            document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
         }
         else if (guessIndex > 5) {
-            document.getElementById('wordwas').innerText = 'The word was '+ target;
+            $("#loseModal").modal();
+            document.getElementById("loseText").innerText = 'The word was ' + target + '. You were THIS close!';
         }
     }
 
-    function changeLanguage() {
-        let button = document.getElementById('language');
-        if (language === 'eng') {
-            language = 'heb';
-            button.value = "ENGLISH"
-        } else {
-            language = 'eng';
-            button.value = "HEBREW"
-        }
+    function changeLanguage(lang) {
+        language = lang;
         for (const eleId of ['virtualKey', 'guesses']) {
             const ele = document.getElementById(eleId);
             while (ele.firstChild) {
@@ -244,20 +292,17 @@
 </script>
 <style>
     .letter {
-        width:60px;
-        height:60px;
+        width:50px;
+        height:50px;
         border:2px solid lightgrey;
-        margin: 5px;
+        margin: 3px;
         text-align: center;
         font-size: 2rem;
         font-weight: bold;
         text-transform: capitalize;
     }
     #virtualKey {
-        margin-top: 50px;
-    }
-    #error {
-        height: 75px;
+        margin-top: 5px;
     }
     #virtualKey input {
         width:50px;
@@ -278,25 +323,34 @@
         margin: 0 auto;
         text-align: center;
     }
-    #newword {
-        background-color: #6aaa64;
-    }
-    #help {
+    .headerBtn {
         border: none;
         background-color: white;
+        transform: translate(-50%,-50%);
     }
     h1 {
         display: inline-block;
+        font-weight: bold;
+        margin: 5px 8%;
+    }
+    hr {
+        margin: 0;
     }
     p {
         text-align: left;
     }
+    .modal {
+        width: 70%;
+    }
     #badword {
         visibility: hidden;
-        position: fixed;
-        left: 45%;
-        width: 10%;
+        position: absolute; /* Important */
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 150px;
         pointer-events: none;
+        z-index: 1;
     }
     #badword.show {
         visibility: visible; /* Show the snackbar */
