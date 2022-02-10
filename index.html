@@ -95,9 +95,13 @@
             return;
         }
         let input = '';
+        let charCount = {};
         for (let i = 0; i < 5; i++) {
             let ele = document.getElementById(guessIndex + '-' + i);
             input += ele.value;
+        }
+        for (const char of target) {
+            charCount[char] = charCount[char] === undefined ? 1 : charCount[char] + 1
         }
         if (allowed.indexOf(input.toLowerCase()) === -1) {
             window.alert('Not a word');
@@ -105,21 +109,31 @@
         }
         for (let [i, char] of Object.entries(input)) {
             let ele = document.getElementById(guessIndex + '-' + i);
-            if (char === target[i]) {
-                console.log(ele.style);
+            if (char === target[i] && charCount[char]) {
+                // green
                 ele.style['background-color']  = '#6aaa64';
                 ele.style['border-color']  = '#6aaa64';
+                charCount[char] = charCount[char] - 1
             }
-            else if (target.indexOf(char) !== -1) {
-                ele.style['background-color']  = '#c9b458';
-                ele.style['border-color']  = '#c9b458';
+            ele.style['color']  = 'white';
+        }
+        for (let [i, char] of Object.entries(input)) {
+            let ele = document.getElementById(guessIndex + '-' + i);
+            if (ele.style['background-color']) {
+                continue
+            }
+            if (target.indexOf(char) !== -1 && charCount[char]) {
+                // yellow
+                ele.style['background-color'] = '#c9b458';
+                ele.style['border-color'] = '#c9b458';
+                charCount[char] = charCount[char] - 1
             }
             else {
+                // grey
                 ele.style['background-color']  = '#787c7e';
                 ele.style['border-color']  = '#787c7e';
                 document.getElementById(char).style['background-color']  = 'grey';
             }
-            ele.style['color']  = 'white';
         }
         guessIndex += 1;
         charIndex = 0;
