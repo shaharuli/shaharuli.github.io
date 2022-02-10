@@ -12,6 +12,9 @@
         <button type="button"  data-toggle="modal" id="help" data-target="#myModal"><i class="fa fa-question-circle fa-lg"></i></button>
     </div>
     <hr/>
+    <div id="error">
+        <input id="badword" class="btn btn-warning btn-lg" value="No such word">
+    </div>
     <div id="guesses"></div>
     <div id="virtualKey"></div>
     <div id="end">
@@ -140,7 +143,7 @@
         }
     }
 
-    function enter() {
+    async function enter() {
         if (charIndex < 5) {
             return;
         }
@@ -157,7 +160,9 @@
             charCount[char] = charCount[char] === undefined ? 1 : charCount[char] + 1
         }
         if (allowed.indexOf(input.toLowerCase()) === -1) {
-            window.alert('Not a word');
+            let ele = document.getElementById('badword');
+            ele.classList.add('show');
+            setTimeout(function(){ ele.className = ele.className.replace("show", ""); }, 2000);
             return
         }
         for (let [i, char] of Object.entries(input)) {
@@ -251,6 +256,9 @@
     #virtualKey {
         margin-top: 50px;
     }
+    #error {
+        height: 75px;
+    }
     #virtualKey input {
         width:50px;
         height:50px;
@@ -282,6 +290,40 @@
     }
     p {
         text-align: left;
+    }
+    #badword {
+        visibility: hidden;
+        position: fixed;
+        left: 45%;
+        width: 10%;
+        pointer-events: none;
+    }
+    #badword.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    /* Animations to fade the snackbar in and out */
+    @-webkit-keyframes fadein {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+
+    @keyframes fadein {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+
+    @-webkit-keyframes fadeout {
+        from {opacity: 1;}
+        to {opacity: 0;}
+    }
+
+    @keyframes fadeout {
+        from {opacity: 1;}
+        to {opacity: 0;}
     }
     @media only screen and (max-width: 768px) {
         /* For mobile phones: */
