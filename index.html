@@ -139,10 +139,12 @@
         win = false;
         document.getElementById('wordwas').innerText = '';
         target = words[Math.floor(Math.random() * words.length)];
+        target = 'boobs';
         if (played) {
             let letters = document.getElementsByClassName("letter");
             for (const letter of letters) {
                 letter.value = '';
+                letter.className = 'letter';
             }
             for (const key of document.getElementById('virtualKey').children) {
                 key.style['background-color']  = '';
@@ -244,7 +246,7 @@
         for (let [i, char] of Object.entries(input)) {
             const langIndex = language === 'eng' ? i : 4 - i;
             let ele = document.getElementById(guessIndex + '-' + langIndex);
-            if (ele.style['background-color']) {
+            if (ele.className.indexOf('letterHit') !== -1) {
                 continue
             }
             if (target.indexOf(char) !== -1 && charCount[char]) {
@@ -387,6 +389,9 @@
     .modal-body {
         text-align: left;
     }
+    .modal-body .letter {
+        margin: 1px;
+    }
     /* Animations to fade the snackbar in and out */
     @-webkit-keyframes fadein {
         from {opacity: 0;}
@@ -411,6 +416,9 @@
         /* For mobile phones: */
         div {
             width: 100%;;
+        }
+        #helpModal {
+            width: 100%;
         }
         .letter {
             width:40px;
