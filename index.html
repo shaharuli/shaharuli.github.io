@@ -36,10 +36,25 @@
                 </div>
                 <div class="modal-body">
                     <p><b>Examples</b><br/></p>
-                    <img src="examples.png" alt="examples">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="button" class="letter letterHit" value="b">
+                    <input type="button" class="letter" value="o">
+                    <input type="button" class="letter" value="o">
+                    <input type="button" class="letter" value="b">
+                    <input type="button" class="letter" value="s">
+                    <br>
+                    <p>The letter <b>B</b> is in the word and in the correct spot.</p>
+                    <input type="button" class="letter" value="p">
+                    <input type="button" class="letter" value="e">
+                    <input type="button" class="letter" value="n">
+                    <input type="button" class="letter letterSemiHit" value="i">
+                    <input type="button" class="letter" value="s">
+                    <p>The letter <b>I</b> is in the word but in the wrong spot.</p>
+                    <input type="button" class="letter" value="s">
+                    <input type="button" class="letter" value="a">
+                    <input type="button" class="letter letterMiss" value="v">
+                    <input type="button" class="letter" value="t">
+                    <input type="button" class="letter" value="a">
+                    <p>The letter <b>V</b> is not in the word in any spot.</p>
                 </div>
             </div>
         </div>
@@ -128,9 +143,6 @@
             let letters = document.getElementsByClassName("letter");
             for (const letter of letters) {
                 letter.value = '';
-                letter.style['background-color']  = '';
-                letter.style['border-color']  = 'lightgrey';
-                letter.style['color']  = 'black';
             }
             for (const key of document.getElementById('virtualKey').children) {
                 key.style['background-color']  = '';
@@ -197,7 +209,7 @@
         }
     }
 
-    async function enter() {
+    function enter() {
         if (charIndex < 5) {
             return;
         }
@@ -224,12 +236,10 @@
             let ele = document.getElementById(guessIndex + '-' + langIndex);
             if (char === target[i] && charCount[char]) {
                 // green
-                ele.style['background-color']  = '#6aaa64';
-                ele.style['border-color']  = '#6aaa64';
-                charCount[char] = charCount[char] - 1
+                ele.className = 'letter letterHit';
+                charCount[char] = charCount[char] - 1;
                 document.getElementById(char).style['background-color']  = '#6aaa64'
             }
-            ele.style['color']  = 'white';
         }
         for (let [i, char] of Object.entries(input)) {
             const langIndex = language === 'eng' ? i : 4 - i;
@@ -239,8 +249,7 @@
             }
             if (target.indexOf(char) !== -1 && charCount[char]) {
                 // yellow
-                ele.style['background-color'] = '#c9b458';
-                ele.style['border-color'] = '#c9b458';
+                ele.className = 'letter letterSemiHit';
                 charCount[char] = charCount[char] - 1
                 const key = document.getElementById(char);
                 if (key.style['background-color'] !== '#6aaa64') {
@@ -249,8 +258,7 @@
             }
             else {
                 // grey
-                ele.style['background-color']  = '#787c7e';
-                ele.style['border-color']  = '#787c7e';
+                ele.className = 'letter letterMiss';
                 document.getElementById(char).style['background-color']  = '#787c7e';
             }
         }
@@ -291,15 +299,31 @@
     });
 </script>
 <style>
+    html, body {margin: 0; height: 100%; overflow: hidden}
     .letter {
         width:50px;
         height:50px;
-        border:2px solid lightgrey;
+        border:1px solid lightgrey;
         margin: 3px;
         text-align: center;
         font-size: 2rem;
         font-weight: bold;
         text-transform: capitalize;
+    }
+    input.letterHit {
+        background-color : #6aaa64;
+        border: none;
+        color: white;
+    }
+    input.letterSemiHit {
+        background-color : #c9b458;
+        border: none;
+        color: white;
+    }
+    input.letterMiss {
+        background-color : #787c7e;
+        border: none;
+        color: white;
     }
     #virtualKey {
         margin-top: 5px;
@@ -339,9 +363,6 @@
     p {
         text-align: left;
     }
-    .modal {
-        width: 70%;
-    }
     #badword {
         visibility: hidden;
         position: absolute; /* Important */
@@ -358,6 +379,13 @@
         However, delay the fade out process for 2.5 seconds */
         -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
         animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    .modal {
+        width: 70%;
+        overflow-y: hidden;
+    }
+    .modal-body {
+        text-align: left;
     }
     /* Animations to fade the snackbar in and out */
     @-webkit-keyframes fadein {
@@ -411,9 +439,6 @@
         }
         #virtualKey #backspace {
             width:35px;
-        }
-        #helpModal {
-            /*width: 100%;*/
         }
     }
 </style>
