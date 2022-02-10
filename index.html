@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <title>Wordle</title>
 <link rel="icon" href="favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <body>
 <div id="guesses"></div>
 <div id="VirtualKey">
@@ -25,7 +26,7 @@
     <input type="button" onclick="input(this.id);" value="K" id="k"/>
     <input type="button" onclick="input(this.id);" value="L" id="l"/>
     <br />
-    <input type="button" value="Enter" onclick="enter();" />
+    <input type="button" value="Enter" onclick="enter();" id="enter"/>
     <input type="button" onclick="input(this.id);" value="Z" id="z"/>
     <input type="button" onclick="input(this.id);" value="X" id="x"/>
     <input type="button" onclick="input(this.id);" value="C" id="c"/>
@@ -33,7 +34,7 @@
     <input type="button" onclick="input(this.id);" value="B" id="b"/>
     <input type="button" onclick="input(this.id);" value="N" id="n"/>
     <input type="button" onclick="input(this.id);" value="M" id="m"/>
-    <input type="button" onclick="del();" value="&#9003"/>
+    <input type="button" onclick="del();" value="&#9003" id="backspace">
     <br />
 </div>
 <div id="end">
@@ -187,6 +188,12 @@
         text-transform: capitalize;
         font-weight: bold;
     }
+    #VirtualKey #enter {
+        width:100px;
+    }
+    #VirtualKey #backspace {
+        width:70px;
+    }
     div {
         width: 70%;
         margin: 0 auto;
@@ -199,5 +206,39 @@
         border-radius: 5px;
         border: none;
         background-color: #6aaa64;
+    }
+    @media only screen and (max-width: 768px) {
+        /* For mobile phones: */
+        div {
+            width: 100%;;
+        }
+        .letter {
+            width:40px;
+            height:40px;
+            border:2px solid lightgrey;
+            margin: 5px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+        #VirtualKey {
+            margin-top: 0;
+        }
+        #VirtualKey input {
+            width:26px;
+            height:50px;
+            margin: 5px 1px 1px 1px;
+            border: none;
+            border-radius: 5px;
+            text-transform: capitalize;
+            font-weight: bold;
+        }
+        #VirtualKey #enter {
+            width:50px;
+        }
+        #VirtualKey #backspace {
+            width:35px;
+        }
     }
 </style>
