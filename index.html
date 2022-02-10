@@ -49,10 +49,13 @@
     let charIndex = 0;
     let target = '';
     let played = false;
+    let win = false;
     init();
     function init() {
         guessIndex = 0;
         charIndex = 0;
+        win = false;
+        document.getElementById('wordwas').innerText = '';
         target = words[Math.floor(Math.random() * words.length)];
         if (played) {
             let letters = document.getElementsByClassName("letter");
@@ -60,6 +63,7 @@
                 letter.value = '';
                 letter.style['background-color']  = 'white';
                 letter.style['border-color']  = 'lightgrey';
+                letter.style['color']  = 'black';
             }
             for (const key of document.getElementById('VirtualKey').children) {
                 key.style['background-color']  = '';
@@ -79,6 +83,9 @@
         played = true;
     }
     function input(char) {
+        if (win) {
+            return
+        }
         document.getElementById(guessIndex + '-' + charIndex).value = char;
         charIndex += 1;
     }
@@ -137,7 +144,11 @@
         }
         guessIndex += 1;
         charIndex = 0;
-        if (guessIndex > 5) {
+        if (input === target) {
+            document.getElementById('wordwas').innerText = 'You win!';
+            win = true;
+        }
+        else if (guessIndex > 5) {
             document.getElementById('wordwas').innerText = 'The word was '+ target;
         }
     }
