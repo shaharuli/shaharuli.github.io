@@ -6,7 +6,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
-<body style="position:relative;">
+<body id="body" style="position:relative;display:none">
     <div id="header">
         <button type="button"  data-toggle="modal" id="help" class="headerBtn" data-target="#helpModal"><i class="fa fa-question-circle fa-lg"></i></button>
         <h1>SHAHARLE</h1>
@@ -192,6 +192,7 @@
             }
         }
         played = true;
+        document.getElementById('body').style['display'] = 'block';
     }
     function input(char) {
         if (win) {
