@@ -1,0 +1,152 @@
+html, body {margin: 0; height: 100%; overflow: hidden}
+.letter {
+    width:50px;
+    height:50px;
+    border:1px solid lightgrey;
+    margin: 3px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+input.letterHit {
+    background-color : #6aaa64;
+    border: none;
+    color: white;
+}
+input.letterSemiHit {
+    background-color : #c9b458;
+    border: none;
+    color: white;
+}
+input.letterMiss {
+    background-color : #787c7e;
+    border: none;
+    color: white;
+}
+#virtualKey {
+    margin-top: 5px;
+}
+#virtualKey input {
+    width:50px;
+    height:50px;
+    margin: 3px;
+    border: none;
+    border-radius: 5px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+#virtualKey #enter {
+    width:100px;
+}
+#virtualKey #backspace {
+    width:70px;
+}
+div {
+    margin: 0 auto;
+    text-align: center;
+}
+.headerBtn {
+    border: none;
+    background-color: transparent;
+    transform: translate(-50%,-50%);
+}
+h1 {
+    display: inline-block;
+    font-weight: bold;
+    margin: 5px 8%;
+}
+hr {
+    margin: 0;
+}
+p {
+    text-align: left;
+}
+#badword {
+    visibility: hidden;
+    position: absolute; /* Important */
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 150px;
+    pointer-events: none;
+    z-index: 1;
+}
+#badword.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+.modal {
+    width: 70%;
+    overflow-y: hidden;
+}
+.modal-body {
+    text-align: left;
+}
+.modal-body .letter {
+    margin: 1px;
+}
+#langSelect {
+    color: black;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    div {
+        width: 100%;;
+    }
+    .modal {
+        width: 100%;
+    }
+    .letter {
+        width:40px;
+        height:40px;
+        border:2px solid lightgrey;
+        margin: 5px;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+    #virtualKey {
+        margin-top: 0;
+    }
+    #virtualKey input {
+        width:26px;
+        height:50px;
+        margin: 5px 1px 1px 1px;
+        border: none;
+        border-radius: 5px;
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+    #virtualKey #enter {
+        width:50px;
+    }
+    #virtualKey #backspace {
+        width:35px;
+    }
+}
