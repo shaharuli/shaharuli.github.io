@@ -9,6 +9,16 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     font-weight: bold;
     text-transform: capitalize;
 }
+.exampleLetter {
+    width:50px;
+    height:50px;
+    border:1px solid lightgrey;
+    margin: 1px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
 input.letterHit {
     background-color : #6aaa64;
     border: none;
@@ -86,9 +96,7 @@ p {
 .modal-body {
     text-align: left;
 }
-.modal-body .letter {
-    margin: 1px;
-}
+
 #langSelect {
     color: black;
 }
