@@ -17,6 +17,11 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     -webkit-transform:rotateY(180deg) scale(-1, 1); /* Safari and Chrome */
     -webkit-transition-duration:0.5s;
 }
+
+.letter-pulse {
+    animation: pulse 0.1s ;
+    border-color: darkgray;
+}
 .exampleLetter {
     width:50px;
     height:50px;
@@ -153,6 +158,20 @@ p {
 @keyframes fadeout {
     from {opacity: 1;}
     to {opacity: 0;}
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */

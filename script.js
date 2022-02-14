@@ -86,14 +86,18 @@ function input(char) {
         return
     }
     const langIndex = language === 'eng' ? charIndex : 4 - charIndex;
-    document.getElementById(guessIndex + '-' + langIndex).value = char;
+    ele = document.getElementById(guessIndex + '-' + langIndex);
+    ele.value = char;
+    ele.className += ' letter-pulse';
     charIndex += 1;
 }
 
 function del() {
     if (charIndex > 0) {
         const langIndex = language === 'eng' ? charIndex - 1 : 4 - charIndex + 1;
-        document.getElementById(guessIndex + '-' + (langIndex)).value = ' ';
+        ele = document.getElementById(guessIndex + '-' + (langIndex));
+        ele.value = ' ';
+        ele.className = ele.className.replace(' letter-pulse', '');
         charIndex -= 1;
     }
 }
