@@ -5,7 +5,7 @@ let charIndex = 0;
 let target = '';
 let played = false;
 let win = false;
-let language = 'eng';
+let language = localStorage.getItem('language') || 'eng';
 const keyboard_eng = ['qwertyuiop', 'asdfghjkl', '!zxcvbnm@'];
 const keyboard_heb = ['קראטוןםפ@',
     'שדגכעיחלךף', '!זסבהנמצתץ'];
@@ -18,7 +18,7 @@ function init() {
     guessIndex = 0;
     charIndex = 0;
     win = false;
-    document.getElementById('wordwas').innerText = '';
+    document.getElementById('langSelect').value = language;
     target = words[Math.floor(Math.random() * words.length)];
     if (played) {
         let letters = document.getElementsByClassName("letter");
@@ -73,6 +73,10 @@ function init() {
         }
     }
     played = true;
+    if (localStorage.getItem('darkmode')) {
+        document.getElementById('lightSwitch').checked = true;
+        changeMode();
+    }
     document.getElementById('body').style['display'] = 'block';
 }
 function input(char) {
@@ -169,6 +173,7 @@ function changeLanguage(lang) {
         }
     }
     played = false;
+    localStorage.setItem('language', language);
     init()
 }
 
@@ -188,6 +193,7 @@ function changeMode() {
             modal.className = modal.className.replace(' dark-modal', '');
         }
     }
+    localStorage.setItem('darkmode', switchEle.checked ? 'yes' : '');
 }
 
 document.addEventListener('keydown', function(event) {
