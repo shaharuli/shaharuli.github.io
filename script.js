@@ -163,20 +163,19 @@ function enter() {
         for ([char, color] of Object.entries(keyColors)) {
             document.getElementById(char).style['background-color'] = color;
         }
-    }, 2500);
-
-    guessIndex += 1;
-    charIndex = 0;
-    if (input === target) {
-        $("#winModal").modal();
-        document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
-        saveStats(true);
-    }
-    else if (guessIndex > 5) {
-        $("#loseModal").modal();
-        document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
-        saveStats(false);
-    }
+        guessIndex += 1;
+        charIndex = 0;
+        if (input === target) {
+            $("#winModal").modal();
+            document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
+            saveStats(true);
+        }
+        else if (guessIndex > 5) {
+            $("#loseModal").modal();
+            document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
+            saveStats(false);
+        }
+    }, 2000);
 }
 
 function changeLanguage(lang) {
