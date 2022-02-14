@@ -120,40 +120,51 @@ function enter() {
         setTimeout(function(){ ele.className = ele.className.replace("show", ""); }, 2000);
         return
     }
+    let colors = ['', '', '', '', ''];
+    let keyColors = {};
     for (let [i, char] of Object.entries(input)) {
         const langIndex = language === 'eng' ? i : 4 - i;
-        let ele = document.getElementById(guessIndex + '-' + langIndex);
         if (char === target[i] && charCount[char]) {
             // green
-            ele.className = 'letter letterHit';
+            colors[langIndex] = 'letter letterHit';
             charCount[char] = charCount[char] - 1;
-            document.getElementById(char).style['background-color']  = '#6aaa64'
+            keyColors[char] = '#6aaa64';
         }
     }
     for (let [i, char] of Object.entries(input)) {
         const langIndex = language === 'eng' ? i : 4 - i;
-        let ele = document.getElementById(guessIndex + '-' + langIndex);
-        if (ele.className.indexOf('letterHit') !== -1) {
+        if (colors[langIndex]) {
             continue
         }
         if (target.indexOf(char) !== -1 && charCount[char]) {
             // yellow
-            ele.className = 'letter letterSemiHit';
+            colors[langIndex] = 'letter letterSemiHit';
             charCount[char] = charCount[char] - 1;
             const key = document.getElementById(char);
             if (key.style['background-color'] !== '#6aaa64') {
-                key.style['background-color'] = '#c9b458';
+                keyColors[char] = '#c9b458';
             }
         }
         else {
             // grey
-            ele.className = 'letter letterMiss';
+            colors[langIndex] = 'letter letterMiss';
             const keyEle = document.getElementById(char);
             if (!keyEle.style['background-color']) {
-                document.getElementById(char).style['background-color'] = '#787c7e';
+                keyColors[char] = '#787c7e';
             }
         }
     }
+    for (let i = 0; i < 5; i++) {
+        const color = colors[i];
+        const eleId = guessIndex + '-' + i;
+        setTimeout(function(){ document.getElementById(eleId).className = color + ' letter-flip';}, i * 400);
+    }
+    setTimeout(function() {
+        for ([char, color] of Object.entries(keyColors)) {
+            document.getElementById(char).style['background-color'] = color;
+        }
+    }, 2500);
+
     guessIndex += 1;
     charIndex = 0;
     if (input === target) {
@@ -220,7 +231,7 @@ function loadStats() {
     document.getElementById('winStreak').innerText = stats['streak'];
     const winPercent = stats['games'] ?  Math.round(stats['wins'] / stats['games'] * 100) : 0;
     document.getElementById('winPercent').innerText = '' + winPercent + '%';
-    const avgGuess = Object.values(stats['guesses']).reduce((partialSum, a) => partialSum + a, 0) / stats['wins'];
+    const avgGuess = stats['wins'] ? Object.values(stats['guesses']).reduce((partialSum, a) => partialSum + a, 0) / stats['wins'] : 0;
     document.getElementById('avgGuess').innerText = parseFloat(avgGuess).toFixed(2)
 }
 
