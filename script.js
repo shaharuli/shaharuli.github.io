@@ -169,6 +169,7 @@ function enter() {
             $("#winModal").modal();
             document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
             saveStats(true);
+            win = true;
         }
         else if (guessIndex > 5) {
             $("#loseModal").modal();
