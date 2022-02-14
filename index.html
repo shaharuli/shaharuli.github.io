@@ -15,6 +15,7 @@
         <button type="button"  data-toggle="modal" id="help" class="headerBtn" data-target="#helpModal"><i class="fa fa-question-circle fa-lg"></i></button>
         <h1>SHAHARLE</h1>
         <button type="button"  data-toggle="modal" id="settings" class="headerBtn" data-target="#settingsModal"><i class="fa fa-cog fa-lg"></i></button>
+        <button type="button"  data-toggle="modal" id="stats" class="headerBtn" data-target="#statsModal"><i class="fa fa-bar-chart fa-lg"></i></button>
     </div>
     <hr/>
     <input id="badword" class="btn btn-warning btn-lg" value="No such word">
@@ -121,6 +122,28 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" onclick="init()">Play again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Stats modal-->
+    <div class="modal fade" id="statsModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <b>Your glory hall</b>
+                </div>
+                <div class="modal-body">
+                    <label class="topStat">Games played<span id="gamesPlayed"></span></label>
+                    <label class="topStat">Games won<span id="gamesWon"></span></label>
+                    <label class="topStat">Win streak<span id="winStreak"></span></label>
+                    <br/>
+                    <label class="botStat">Win percent<span id="winPercent"></span></label>
+                    <label class="botStat">Average guesses<span id="avgGuess"></span></label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

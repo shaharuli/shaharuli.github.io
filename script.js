@@ -10,6 +10,7 @@ const keyboard_eng = ['qwertyuiop', 'asdfghjkl', '!zxcvbnm@'];
 const keyboard_heb = ['קראטוןםפ@',
     'שדגכעיחלךף', '!זסבהנמצתץ'];
 let keyboard = [];
+let stats = {};
 init();
 function init() {
     words = language === 'eng' ? words_eng : words_heb;
@@ -77,6 +78,7 @@ function init() {
         document.getElementById('lightSwitch').checked = true;
         changeMode();
     }
+    stats = loadStats();
     document.getElementById('body').style['display'] = 'block';
 }
 function input(char) {
@@ -157,10 +159,12 @@ function enter() {
     if (input === target) {
         $("#winModal").modal();
         document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
+        saveStats(true);
     }
     else if (guessIndex > 5) {
         $("#loseModal").modal();
         document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
+        saveStats(false);
     }
 }
 
@@ -194,6 +198,30 @@ function changeMode() {
         }
     }
     localStorage.setItem('darkmode', switchEle.checked ? 'yes' : '');
+}
+
+function saveStats(win=false) {
+    let stats = JSON.parse(localStorage.getItem('stats') || '{"games": 0, "wins": 0, "streak": 0, "guesses": {}}');
+    stats['games'] += 1;
+    if (win) {
+        stats['wins'] += 1;
+        stats['streak'] += 1;
+        stats['guesses'][target] = guessIndex;
+    } else {
+        stats['streak'] = 0;
+    }
+    localStorage.setItem('stats', JSON.stringify(stats));
+}
+
+function loadStats() {
+    stats = JSON.parse(localStorage.getItem('stats') || '{"games": 0, "wins": 0, "streak": 0, "guesses": {}}');
+    document.getElementById('gamesPlayed').innerText = stats['games'];
+    document.getElementById('gamesWon').innerText = stats['wins'];
+    document.getElementById('winStreak').innerText = stats['streak'];
+    const winPercent = stats['games'] ?  Math.round(stats['wins'] / stats['games'] * 100) : 0;
+    document.getElementById('winPercent').innerText = '' + winPercent + '%';
+    const avgGuess = Object.values(stats['guesses']).reduce((partialSum, a) => partialSum + a, 0) / stats['wins'];
+    document.getElementById('avgGuess').innerText = parseFloat(avgGuess).toFixed(2)
 }
 
 document.addEventListener('keydown', function(event) {

@@ -101,6 +101,31 @@ p {
     color: black;
 }
 
+#statsModal span {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    text-align: center;
+}
+
+#statsModal label {
+    display: inline-block;
+    padding-top: 1.5em;
+    text-align: center;
+}
+
+.topStat {
+    width: 30%;
+}
+.topStat span {
+    font-size: xx-large;
+}
+.botStat {
+    width: 48%;
+}
+.botStat span {
+    font-size: x-large;
+}
 /* Animations to fade the snackbar in and out */
 @-webkit-keyframes fadein {
     from {opacity: 0;}
