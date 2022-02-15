@@ -78,6 +78,10 @@ function init() {
         document.getElementById('lightSwitch').checked = true;
         changeMode();
     }
+    const barEle = document.getElementById("barChart");
+    if (barEle) {
+        barEle.remove()
+    }
     stats = loadStats();
     document.getElementById('playagain').style['visibility'] = 'hidden';
     document.getElementById('body').style['display'] = 'block';
@@ -247,7 +251,9 @@ function loadStats() {
     for (const num of Object.values(stats['guesses'])) {
         data[num - 1]['value'] += 1;
     }
-    console.log(data);
+    let barEle = document.createElement('div');
+    barEle.id = 'barChart';
+    document.getElementById('statsBody').appendChild(barEle);
     let chart = anychart.column();
     chart.column(data).labels(true);
     chart.container('barChart');
@@ -256,6 +262,7 @@ function loadStats() {
     chart.barGroupsPadding(2);
     chart.yAxis().labels().enabled(false);
     chart.draw();
+
 }
 
 document.addEventListener('keydown', function(event) {
