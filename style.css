@@ -86,16 +86,17 @@ p {
     text-align: left;
 }
 #badword {
-    visibility: hidden;
-    position: absolute; /* Important */
+    position: absolute;
     top: 20%;
     left: 50%;
+    pointer-events: none;
+    visibility: hidden;
     transform: translate(-50%,-50%);
     width: 150px;
-    pointer-events: none;
     z-index: 1;
 }
-#badword.show {
+
+.show {
     visibility: visible; /* Show the snackbar */
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */

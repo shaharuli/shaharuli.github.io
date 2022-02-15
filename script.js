@@ -79,6 +79,7 @@ function init() {
         changeMode();
     }
     stats = loadStats();
+    document.getElementById('playagain').style['visibility'] = 'hidden';
     document.getElementById('body').style['display'] = 'block';
 }
 function input(char) {
@@ -174,11 +175,13 @@ function enter() {
             document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
             saveStats(true);
             win = true;
+            document.getElementById('playagain').style['visibility'] = '';
         }
         else if (guessIndex > 5) {
             $("#loseModal").modal();
             document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
             saveStats(false);
+            document.getElementById('playagain').style['visibility'] = '';
         }
     }, 2000);
 }
@@ -237,17 +240,21 @@ function loadStats() {
     document.getElementById('winPercent').innerText = '' + winPercent + '%';
     const avgGuess = stats['wins'] ? Object.values(stats['guesses']).reduce((partialSum, a) => partialSum + a, 0) / stats['wins'] : 0;
     document.getElementById('avgGuess').innerText = parseFloat(avgGuess).toFixed(2);
-    let data = [{x: '1', value: 0}, {x: '2', value: 0}, {x: '3', value: 0}, {x: '4', value: 0}, {x: '5', value: 0}, {x: '6', value: 0}];
+    let data = [];
+    for (let i = 1; i < 7; i++) {
+        data.push({'x': i, 'value': 0, 'normal': {fill: 'green', stroke: null}});
+    }
     for (const num of Object.values(stats['guesses'])) {
         data[num - 1]['value'] += 1;
-        data[num - 1]['normal'] = {fill: 'green', stroke: null};
     }
+    console.log(data);
     let chart = anychart.column();
-    chart.data({header: ['Guesses', 'Words'], rows: data});
-    chart.container("barChart");
-    chart.interactivity().selectionMode("none");
+    chart.column(data).labels(true);
+    chart.container('barChart');
+    chart.background('transparent');
+    chart.interactivity().selectionMode('none');
     chart.barGroupsPadding(2);
-    chart.yScale().minimumGap(1);
+    chart.yAxis().labels().enabled(false);
     chart.draw();
 }
 
