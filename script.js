@@ -236,7 +236,19 @@ function loadStats() {
     const winPercent = stats['games'] ?  Math.round(stats['wins'] / stats['games'] * 100) : 0;
     document.getElementById('winPercent').innerText = '' + winPercent + '%';
     const avgGuess = stats['wins'] ? Object.values(stats['guesses']).reduce((partialSum, a) => partialSum + a, 0) / stats['wins'] : 0;
-    document.getElementById('avgGuess').innerText = parseFloat(avgGuess).toFixed(2)
+    document.getElementById('avgGuess').innerText = parseFloat(avgGuess).toFixed(2);
+    let data = [{x: '1', value: 0}, {x: '2', value: 0}, {x: '3', value: 0}, {x: '4', value: 0}, {x: '5', value: 0}, {x: '6', value: 0}];
+    for (const num of Object.values(stats['guesses'])) {
+        data[num - 1]['value'] += 1;
+        data[num - 1]['normal'] = {fill: 'green', stroke: null};
+    }
+    let chart = anychart.column();
+    chart.data({header: ['Guesses', 'Words'], rows: data});
+    chart.container("barChart");
+    chart.interactivity().selectionMode("none");
+    chart.barGroupsPadding(2);
+    chart.yScale().minimumGap(1);
+    chart.draw();
 }
 
 document.addEventListener('keydown', function(event) {
