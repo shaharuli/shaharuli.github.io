@@ -255,7 +255,9 @@ function loadStats() {
     barEle.id = 'barChart';
     document.getElementById('statsBody').appendChild(barEle);
     let chart = anychart.column();
-    chart.column(data).labels(true);
+    let series = chart.column(data);
+    series.labels(true);
+    series.name("Words");
     chart.container('barChart');
     chart.background('transparent');
     chart.interactivity().selectionMode('none');
