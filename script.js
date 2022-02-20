@@ -3,7 +3,6 @@ let allowed = [];
 let guessIndex = 0;
 let charIndex = 0;
 let target = '';
-let played = false;
 let win = false;
 let language = localStorage.getItem('language') || 'eng';
 const keyboard_eng = ['qwertyuiop', 'asdfghjkl', '!zxcvbnm@'];
@@ -11,7 +10,41 @@ const keyboard_heb = ['קראטוןםפ@',
     'שדגכעיחלךף', '!זסבהנמצתץ'];
 let keyboard = [];
 let stats = {};
+document.getElementById('langSelect').addEventListener('change', function() {
+    changeLanguage(this.value);
+});
 init();
+
+function generateKeyboard() {
+    const keyEle = document.getElementById('virtualKey');
+    for (const row of keyboard) {
+        for (const key of row) {
+            let ele = document.createElement('input');
+            ele.type = 'button';
+            switch (key) {
+                case '!':
+                    ele.onclick = enter;
+                    ele.id = 'enter';
+                    ele.value = 'Enter';
+                    break;
+                case '@':
+                    ele.onclick = del;
+                    ele.id = 'backspace';
+                    ele.value = '\u232B';
+                    break;
+                default:
+                    ele.onclick = function () {
+                        input(this.id);
+                    };
+                    ele.id = key;
+                    ele.value = key;
+            }
+            keyEle.appendChild(ele);
+        }
+        keyEle.appendChild(document.createElement('br'));
+    }
+}
+
 function init() {
     words = language === 'eng' ? words_eng : words_heb;
     allowed = language === 'eng' ? allowed_eng : allowed_heb;
@@ -21,59 +54,18 @@ function init() {
     win = false;
     document.getElementById('langSelect').value = language;
     target = words[Math.floor(Math.random() * words.length)];
-    if (played) {
-        let letters = document.getElementsByClassName("letter");
-        for (const letter of letters) {
-            letter.value = '';
-            letter.className = 'letter';
-        }
-        for (const key of document.getElementById('virtualKey').children) {
-            key.style['background-color']  = '';
-        }
-    } else {
-        document.getElementById('langSelect').addEventListener('change', function() {
-            changeLanguage(this.value);
-        });
-        const keyEle = document.getElementById('virtualKey');
-        for (const row of keyboard) {
-            for (const key of row) {
-                let ele = document.createElement('input');
-                ele.type = 'button';
-                switch (key) {
-                    case '!':
-                        ele.onclick = enter;
-                        ele.id = 'enter';
-                        ele.value = 'Enter';
-                        break;
-                    case '@':
-                        ele.onclick = del;
-                        ele.id = 'backspace';
-                        ele.value = '\u232B';
-                        break;
-                    default:
-                        ele.onclick = function () {
-                            input(this.id);
-                        };
-                        ele.id = key;
-                        ele.value = key;
-                }
-                keyEle.appendChild(ele)
-            }
-            keyEle.appendChild(document.createElement('br'))
-        }
-        const guesses = document.getElementById('guesses');
-        for (let i = 0; i < 6; i++) {
-            for (let j = 0; j < 5; j++) {
-                let ele = document.createElement('input');
-                ele.disabled = true;
-                ele.id = i + '-' + j;
-                ele.className = 'letter';
-                guesses.appendChild(ele);
-            }
-            guesses.appendChild(document.createElement('br'))
-        }
+    let letters = document.getElementsByClassName("letter");
+    for (const letter of letters) {
+        letter.value = '';
+        letter.className = 'letter';
     }
-    played = true;
+    for (const key of document.getElementById('virtualKey').children) {
+        key.className = '';
+    }
+    if (!document.getElementById('virtualKey').children.length) {
+        generateKeyboard();
+    }
+    loadState();
     if (localStorage.getItem('darkmode')) {
         document.getElementById('lightSwitch').checked = true;
         changeMode();
@@ -86,12 +78,13 @@ function init() {
     document.getElementById('playagain').style['visibility'] = 'hidden';
     document.getElementById('body').style['display'] = 'block';
 }
+
 function input(char) {
     if (win) {
         return
     }
     const langIndex = language === 'eng' ? charIndex : 4 - charIndex;
-    ele = document.getElementById(guessIndex + '-' + langIndex);
+    const ele = document.getElementById(guessIndex + '-' + langIndex);
     ele.value = char;
     ele.className += ' letter-pulse';
     charIndex += 1;
@@ -137,7 +130,7 @@ function enter() {
             // green
             colors[langIndex] = 'letter letterHit';
             charCount[char] = charCount[char] - 1;
-            keyColors[char] = '#6aaa64';
+            keyColors[char] = 'letterHit';
         }
     }
     for (let [i, char] of Object.entries(input)) {
@@ -150,34 +143,37 @@ function enter() {
             colors[langIndex] = 'letter letterSemiHit';
             charCount[char] = charCount[char] - 1;
             const key = document.getElementById(char);
-            if (key.style['background-color'] !== '#6aaa64') {
-                keyColors[char] = '#c9b458';
+            if (!key.className) {
+                keyColors[char] = 'letterSemiHit';
             }
         }
         else {
             // grey
             colors[langIndex] = 'letter letterMiss';
-            const keyEle = document.getElementById(char);
-            if (!keyEle.style['background-color']) {
-                keyColors[char] = '#787c7e';
+            const key = document.getElementById(char);
+            if (!key.className) {
+                keyColors[char] = 'letterMiss';
             }
         }
     }
     for (let i = 0; i < 5; i++) {
-        const color = colors[i];
-        const eleId = guessIndex + '-' + i;
+        const langIndex = language === 'eng' ? i : 4 - i;
+        const color = colors[langIndex];
+        const eleId = guessIndex + '-' + langIndex;
         setTimeout(function(){ document.getElementById(eleId).className = color + ' letter-flip';}, i * 400);
     }
     setTimeout(function() {
         for ([char, color] of Object.entries(keyColors)) {
-            document.getElementById(char).style['background-color'] = color;
+            document.getElementById(char).className = color;
         }
         guessIndex += 1;
         charIndex = 0;
+        saveState();
         if (input === target) {
             $("#winModal").modal();
             document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
             saveStats(true);
+            localStorage.removeItem('state');
             win = true;
             document.getElementById('playagain').style['visibility'] = '';
         }
@@ -185,6 +181,7 @@ function enter() {
             $("#loseModal").modal();
             document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
             saveStats(false);
+            localStorage.removeItem('state');
             document.getElementById('playagain').style['visibility'] = '';
         }
     }, 2000);
@@ -192,15 +189,12 @@ function enter() {
 
 function changeLanguage(lang) {
     language = lang;
-    for (const eleId of ['virtualKey', 'guesses']) {
-        const ele = document.getElementById(eleId);
-        while (ele.firstChild) {
-            ele.removeChild(ele.firstChild);
-        }
+    const ele = document.getElementById('virtualKey');
+    while (ele.firstChild) {
+        ele.removeChild(ele.firstChild);
     }
-    played = false;
     localStorage.setItem('language', language);
-    init()
+    init();
 }
 
 function changeMode() {
@@ -264,7 +258,36 @@ function loadStats() {
     chart.barGroupsPadding(2);
     chart.yAxis().labels().enabled(false);
     chart.draw();
+}
 
+function saveState() {
+    let state = {};
+    const letters = document.getElementsByClassName('letter');
+    const keyboard = document.getElementById('virtualKey');
+    for (const letter of letters) {
+        if (letter.value) {
+            state[letter.id] = {class: letter.className, value: letter.value}
+        }
+    }
+    for (const key of keyboard.children) {
+        if (key.className) {
+            state[key.id] = {class: key.className, value: key.value}
+        }
+    }
+    localStorage.setItem('state', JSON.stringify(state));
+    localStorage.setItem('guessIndex', guessIndex);
+    localStorage.setItem('target', target);
+}
+
+function loadState() {
+    const state = JSON.parse(localStorage.getItem('state') || '{}');
+    for (let [eleId, attrs] of Object.entries(state)) {
+        const ele = document.getElementById(eleId);
+        ele.className = attrs['class'];
+        ele.value = attrs['value'];
+    }
+    guessIndex = JSON.parse(localStorage.getItem('guessIndex') || '0');
+    target = localStorage.getItem('target') || target;
 }
 
 document.addEventListener('keydown', function(event) {
