@@ -174,6 +174,8 @@ function enter() {
             document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
             saveStats(true);
             localStorage.removeItem('state');
+            localStorage.removeItem('guessIndex');
+            localStorage.removeItem('target');
             win = true;
             document.getElementById('playagain').style['visibility'] = '';
         }
@@ -182,6 +184,8 @@ function enter() {
             document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
             saveStats(false);
             localStorage.removeItem('state');
+            localStorage.removeItem('guessIndex');
+            localStorage.removeItem('target');
             document.getElementById('playagain').style['visibility'] = '';
         }
     }, 2000);
