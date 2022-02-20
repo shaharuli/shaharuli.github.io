@@ -284,14 +284,17 @@ function saveState() {
 }
 
 function loadState() {
-    const state = JSON.parse(localStorage.getItem('state') || '{}');
-    for (let [eleId, attrs] of Object.entries(state)) {
-        const ele = document.getElementById(eleId);
-        ele.className = attrs['class'];
-        ele.value = attrs['value'];
+    let state = localStorage.getItem('state');
+    if (state) {
+        state = JSON.parse(state);
+        for (let [eleId, attrs] of Object.entries(state)) {
+            const ele = document.getElementById(eleId);
+            ele.className = attrs['class'];
+            ele.value = attrs['value'];
+        }
+        guessIndex = JSON.parse(localStorage.getItem('guessIndex') || '0');
+        target = localStorage.getItem('target') || target;
     }
-    guessIndex = JSON.parse(localStorage.getItem('guessIndex') || '0');
-    target = localStorage.getItem('target') || target;
 }
 
 document.addEventListener('keydown', function(event) {
