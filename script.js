@@ -65,7 +65,7 @@ function init() {
     if (!document.getElementById('virtualKey').children.length) {
         generateKeyboard();
     }
-    loadState();
+    try { loadState(); } catch (error) {}
     if (localStorage.getItem('darkmode')) {
         document.getElementById('lightSwitch').checked = true;
         changeMode();
@@ -143,7 +143,7 @@ function enter() {
             colors[langIndex] = 'letter letterSemiHit';
             charCount[char] = charCount[char] - 1;
             const key = document.getElementById(char);
-            if (!key.className) {
+            if (key.className.indexOf('letter') === -1) {
                 keyColors[char] = 'letterSemiHit';
             }
         }
@@ -151,7 +151,7 @@ function enter() {
             // grey
             colors[langIndex] = 'letter letterMiss';
             const key = document.getElementById(char);
-            if (!key.className) {
+            if (key.className.indexOf('letter') === -1) {
                 keyColors[char] = 'letterMiss';
             }
         }
@@ -274,7 +274,7 @@ function saveState() {
         }
     }
     for (const key of keyboard.children) {
-        if (key.className) {
+        if (key.className.indexOf('letter') !== -1) {
             state[key.id] = {class: key.className, value: key.value}
         }
     }
