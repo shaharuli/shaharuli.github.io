@@ -65,7 +65,7 @@ function init() {
     if (!document.getElementById('virtualKey').children.length) {
         generateKeyboard();
     }
-    try { loadState(); } catch (error) {}
+    // try { loadState(); } catch (error) {}
     if (localStorage.getItem('darkmode')) {
         document.getElementById('lightSwitch').checked = true;
         changeMode();
