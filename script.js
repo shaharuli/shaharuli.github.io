@@ -143,7 +143,7 @@ function enter() {
             colors[langIndex] = 'letter letterSemiHit';
             charCount[char] = charCount[char] - 1;
             const key = document.getElementById(char);
-            if (key.className.indexOf('letter') === -1) {
+            if (key.className.indexOf('letter') === -1 && !keyColors[char]) {
                 keyColors[char] = 'letterSemiHit';
             }
         }
@@ -151,7 +151,7 @@ function enter() {
             // grey
             colors[langIndex] = 'letter letterMiss';
             const key = document.getElementById(char);
-            if (key.className.indexOf('letter') === -1) {
+            if (key.className.indexOf('letter') === -1 && !keyColors[char]) {
                 keyColors[char] = 'letterMiss';
             }
         }
