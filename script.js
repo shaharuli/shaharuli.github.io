@@ -65,7 +65,7 @@ function init() {
     if (!document.getElementById('virtualKey').children.length) {
         generateKeyboard();
     }
-    // try { loadState(); } catch (error) {}
+    try { loadState(); } catch (error) {}
     if (localStorage.getItem('darkmode')) {
         document.getElementById('lightSwitch').checked = true;
         changeMode();
@@ -174,7 +174,6 @@ function enter() {
             document.getElementById("winText").innerHTML = 'You guessed <b>' + target + '</b>! And it only took you ' + guessIndex + ' attempts';
             saveStats(true);
             localStorage.removeItem('state');
-            localStorage.removeItem('guessIndex');
             localStorage.removeItem('target');
             win = true;
             document.getElementById('playagain').style['visibility'] = '';
@@ -184,7 +183,6 @@ function enter() {
             document.getElementById("loseText").innerHTML = 'The word was <b>' + target + '</b>. You were THIS close!';
             saveStats(false);
             localStorage.removeItem('state');
-            localStorage.removeItem('guessIndex');
             localStorage.removeItem('target');
             document.getElementById('playagain').style['visibility'] = '';
         }
@@ -279,7 +277,6 @@ function saveState() {
         }
     }
     localStorage.setItem('state', JSON.stringify(state));
-    localStorage.setItem('guessIndex', guessIndex);
     localStorage.setItem('target', target);
 }
 
@@ -287,14 +284,22 @@ function loadState() {
     let state = localStorage.getItem('state');
     if (state) {
         state = JSON.parse(state);
+        let letterCount = 0;
         for (let [eleId, attrs] of Object.entries(state)) {
             const ele = document.getElementById(eleId);
             ele.className = attrs['class'];
             ele.value = attrs['value'];
+            letterCount += eleId.indexOf('-') === -1 ? 0 : 1;
         }
-        guessIndex = JSON.parse(localStorage.getItem('guessIndex') || '0');
+        guessIndex = letterCount / 5;
         target = localStorage.getItem('target') || target;
     }
+}
+
+function giveUp() {
+    localStorage.removeItem('state');
+    localStorage.removeItem('target');
+    init();
 }
 
 document.addEventListener('keydown', function(event) {

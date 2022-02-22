@@ -85,16 +85,16 @@
                         <option value="eng">English</option>
                         <option value="heb">עברית</option>
                     </select>
-                    <br/>
+                    <br>
                     <label>Dark mode:</label>
                     <label class="switch">
                         <input id="lightSwitch" type="checkbox" onclick="changeMode()">
                         <span class="slider round"></span>
                     </label>
-                    <div class="background"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-sm" onclick="giveUp()" style="float: left" data-dismiss="modal">give up</button>
                 </div>
             </div>
         </div>
