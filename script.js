@@ -212,7 +212,7 @@ function changeMode() {
     } else {
         body.className = '';
         for (const modal of Array.from(modals).concat(Array.from(keys))) {
-            modal.className = modal.className.replace(' dark-modal', '');
+            modal.className = modal.className.replace(/dark-modal/i, '');
         }
     }
     localStorage.setItem('darkmode', switchEle.checked ? 'yes' : '');
