@@ -47,7 +47,7 @@ function generateKeyboard() {
 
 function init() {
     words = language === 'eng' ? words_eng : words_heb;
-    allowed = language === 'eng' ? allowed_eng : allowed_heb;
+    allowed = language === 'eng' ? allowed_eng.concat(words_eng) : allowed_heb.concat(words_heb);
     keyboard = language === 'eng' ? keyboard_eng : keyboard_heb;
     guessIndex = 0;
     charIndex = 0;
